@@ -31,50 +31,50 @@
             <div class="col-6">INITIAL PRICE</div>
             <div class="col-3"></div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="initPrice" type="number" class="form-control" oninput="setValue()"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
             <div class="col-6">OPTION 1</div>
             <div class="col-3"></div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="optionOne" type="number" class="form-control" oninput="setValue()"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
             <div class="col-6">OPTION 2</div>
             <div class="col-3"></div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="optionTwo" type="number" class="form-control" oninput="setValue()"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
             <div class="col-6">OPTION 3</div>
             <div class="col-3"></div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="optionThree" type="number" class="form-control" oninput="setValue()"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
             <div class="col-6">Recycle (m3)</div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="recycleM_num" type="number" class="form-control" oninput="setValue()"/>
             </div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="recycleM" type="number" class="form-control"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
             <div class="col-6">CAUTION</div>
             <div class="col-3">
-                <select class="form-select" aria-label="Default select example">
+                <select id="cautionType" class="form-select" aria-label="Default select example" onchange="setValue()">
                     <option selected>None</option>
-                    <option value="1">YES</option>
-                    <option value="2">NO</option>
+                    <option value="Yes">YES</option>
+                    <option value="No">NO</option>
                 </select>
             </div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="cautionInput" type="number" class="form-control"/>
             </div>
         </div>
         <div class="my-table-header mb-2"></div>
@@ -83,7 +83,7 @@
             <div class="col-3">
             </div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="subTotal" type="number" class="form-control"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
@@ -91,7 +91,7 @@
             <div class="col-3">
             </div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="vat" type="number" class="form-control"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
@@ -99,35 +99,91 @@
             <div class="col-3">
             </div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="total" type="number" class="form-control"/>
             </div>
         </div>
         <div class="row align-items-center mb-1">
             <div class="col-6">PAYMENT TWINT(+1.3%)</div>
             <div class="col-3">
-                <select class="form-select" aria-label="Default select example">
+                <select id="paymentType" class="form-select" aria-label="Default select example" onchange="setValue()">
                     <option selected>None</option>
-                    <option value="1">YES</option>
-                    <option value="2">NO</option>
+                    <option value="Yes">YES</option>
+                    <option value="No">NO</option>
                 </select>
             </div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="paymentInput" type="number" class="form-control"/>
             </div>
         </div>
         <div class="row align-items-center mb-3">
             <div class="col-9">TOTAL TO PAY</div>
             <div class="col-3">
-                <input type="number" class="form-control"/>
+                <input id="totalPay" type="number" class="form-control"/>
             </div>
         </div>
+        <div class="d-flex justify-content-center mb-3">
+            <button type="button" class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+        </div>
         <div class="d-flex justify-content-center">
-            <img style="width: 80%;" src="./qrcode.png" />
+            <img style="max-width: 80%;" src="./qrcode.png" />
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-</body>
-</html>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+</script>
 
 </body>
+
+<script>
+    (function(){
+      emailjs.init("YTRfd32e3RcaZ70BA");
+   })();
+    const getVal = (name, type='num') => {
+        if(type == 'num') return Number(document.getElementById(name).value)
+        else if(type == 'str') return document.getElementById(name).value
+    }
+
+    const getObj = (name) => {
+        return document.getElementById(name)
+    }
+
+    const mRound = (number, roundto) => {
+        return roundto * Math.round(Number(number)/roundto);
+    }
+
+    const sendEmail = () => {
+        var templateParams = {
+            initPrice: getVal('initPrice'),
+            optionOne: getVal('optionOne'),
+            optionTwo: getVal('optionTwo'),
+            optionThree: getVal('optionThree'),
+            recycleM: getVal('recycleM'),
+            cautionInput: getVal('cautionInput'),
+            subTotal: getVal('subTotal'),
+            vat: getVal('vat'),
+            total: getVal('total'),
+            paymentInput: getVal('paymentInput'),
+            totalPay: getVal('totalPay')
+        };
+        emailjs.send('service_05jawjg', 'template_ug7f13d', templateParams)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+                console.log('FAILED...', error);
+            });
+    }
+
+    const setValue = () => {
+        getObj('recycleM').value = (getVal('recycleM_num') * 90).toFixed(2);
+        getObj('cautionInput').value = getVal('cautionType', 'str') == 'Yes'? 100: 0;
+        getObj('subTotal').value = mRound(getVal('initPrice')+getVal('optionOne')+getVal('optionTwo')+getVal('optionThree')+getVal('recycleM')+getVal('cautionInput'), 0.05).toFixed(2)
+        getObj('vat').value = mRound((getVal('initPrice')+getVal('optionOne')+getVal('optionTwo')+getVal('optionThree')+getVal('recycleM'))*0.077, 0.05).toFixed(2)
+        getObj('total').value = (getVal('subTotal')+getVal('vat')).toFixed(2)
+        getObj('paymentInput').value = getVal('paymentType', 'str') == 'Yes'? (0.013*getVal('total')).toFixed(2): 0;
+        getObj('totalPay').value = mRound(getVal('paymentInput')+getVal('vat')+getVal('cautionInput')+getVal('subTotal'), 0.05).toFixed(2)
+    }
+
+</script>
+
 </html>
